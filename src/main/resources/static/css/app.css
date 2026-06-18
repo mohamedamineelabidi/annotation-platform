@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
-   AnnotateAI Studio — Editorial design system
+   LabelCraft — Editorial design system
    Bold creative annotation studio. Warm cream, red CTAs,
    rose/pink accents, yellow highlights, editorial type.
    ============================================================ */
@@ -10,6 +10,7 @@
     /* Brand palette */
     --brand-red: #E43D12;
     --brand-red-strong: #c5330d;
+    --brand-orange: #FF5630;
     --brand-rose: #D6536D;
     --brand-pink: #FFA2B6;
     --brand-yellow: #EFB11D;
@@ -120,29 +121,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .brand-mark {
-    width: 42px;
-    height: 42px;
-    border-radius: 13px;
-    background: var(--brand-red);
+    width: 38px;
+    height: 38px;
+    background: transparent;
     display: grid;
     place-items: center;
-    color: var(--brand-cream);
-    font-size: 1.2rem;
+    color: var(--brand-orange);
+    font-size: 1.9rem;
     flex-shrink: 0;
     position: relative;
-    box-shadow: 0 8px 16px rgba(228, 61, 18, 0.28);
-}
-
-.brand-mark::after {
-    content: "";
-    position: absolute;
-    right: -3px;
-    top: -3px;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: var(--brand-yellow);
-    border: 2px solid var(--sidebar-bg);
 }
 
 .brand-word {
@@ -154,8 +141,8 @@ h1, h2, h3, h4, h5, h6 {
 .brand-word-top {
     font-family: var(--font-head);
     font-weight: 700;
-    font-size: 1.12rem;
-    letter-spacing: 0.02em;
+    font-size: 1.32rem;
+    letter-spacing: -0.01em;
     color: var(--brand-dark);
 }
 

@@ -74,7 +74,7 @@ public class TaskController {
         model.addAttribute("task", task);
         model.addAttribute("taskItem", taskItem);
         model.addAttribute("item", taskItem.getDatasetItem());
-        model.addAttribute("labels", datasetService.findLabelsFor(taskItem.getDatasetItem().getTaskType()));
+        model.addAttribute("labels", datasetService.classesOf(task.getDataset()));
         model.addAttribute("existingLabel", existingLabel);
         model.addAttribute("index", current);
         model.addAttribute("total", items.size());
