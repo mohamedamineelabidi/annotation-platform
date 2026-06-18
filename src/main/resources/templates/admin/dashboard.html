@@ -11,12 +11,16 @@
 <body>
 <div class="app-layout">
     <aside class="sidebar" id="sidebar">
-        <div class="brand">
-            <span class="brand-logo"><i class="bi bi-bounding-box-circles"></i></span>
-            <span class="brand-name">AnnotateAI</span>
-        </div>
+        <a class="brand" th:href="@{/admin/dashboard}">
+            <span class="brand-mark"><i class="bi bi-asterisk"></i></span>
+            <span class="brand-word">
+                <span class="brand-word-top">ANNOTATE</span>
+                <span class="brand-word-bottom">AI Studio</span>
+            </span>
+        </a>
         <nav class="side-nav">
             <a class="side-link active" th:href="@{/admin/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="side-link" th:href="@{/admin/datasets}"><i class="bi bi-collection"></i> Datasets</a>
             <a class="side-link" th:href="@{/admin/users}"><i class="bi bi-people"></i> Users</a>
             <a class="side-link" th:href="@{/admin/import}"><i class="bi bi-cloud-arrow-up"></i> Import</a>
             <a class="side-link" th:href="@{/admin/labels}"><i class="bi bi-tags"></i> Labels</a>
@@ -42,40 +46,54 @@
     <div class="app-body">
         <header class="topbar">
             <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="bi bi-list"></i></button>
+            <div class="topbar-label">
+                <span class="tl-k">Studio</span>
+                <span class="tl-v">Admin workspace</span>
+            </div>
             <div class="search">
                 <i class="bi bi-search"></i>
                 <input type="text" placeholder="Search annotators, datasets...">
             </div>
             <div class="topbar-actions">
                 <span class="pill hide-sm"><i class="bi bi-database"></i> <span th:text="${stats['items']}">0</span> items</span>
-                <button class="icon-btn"><i class="bi bi-bell"></i><span class="badge-dot"></span></button>
+                <button class="icon-btn" aria-label="Notifications"><i class="bi bi-bell"></i><span class="badge-dot"></span></button>
                 <span class="pill online"><span class="dot"></span> Online</span>
             </div>
         </header>
         <main class="app-content">
-            <h1 class="page-title">Admin Dashboard</h1>
-            <p class="page-sub">Overview of annotation progress and team performance.</p>
+            <section class="hero">
+                <div class="hero-inner">
+                    <span class="hero-eyebrow"><span class="deco"></span> Annotation Studio</span>
+                    <h1 class="hero-title">Turn raw text into <em>reliable NLP labels</em></h1>
+                    <p class="hero-sub">Review datasets, guide annotators, and keep every label consistent &mdash; all from one editorial workspace.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" th:href="@{/admin/import}"><i class="bi bi-cloud-arrow-up"></i> Import Dataset</a>
+                        <a class="btn btn-outline-secondary" th:href="@{/admin/training}"><i class="bi bi-stars"></i> Generate AI Suggestions</a>
+                        <span class="pill"><i class="bi bi-collection"></i> <span th:text="${stats['items']}">0</span> items ready</span>
+                    </div>
+                </div>
+            </section>
 
             <div class="stat-grid">
-                <div class="stat">
-                    <div class="stat-top"><span class="stat-label">Annotators</span><span class="stat-ico i-brand"><i class="bi bi-people"></i></span></div>
+                <div class="stat accent-pink">
+                    <div class="stat-top"><span class="stat-label">Annotators</span><span class="stat-ico i-pink"><i class="bi bi-people"></i></span></div>
                     <div class="stat-value" th:text="${stats['annotators']}">0</div>
-                    <div class="stat-delta">Active team members</div>
+                    <div class="stat-delta">Active reviewers in the studio</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-top"><span class="stat-label">Dataset Items</span><span class="stat-ico i-sky"><i class="bi bi-database"></i></span></div>
+                <div class="stat accent-yellow">
+                    <div class="stat-top"><span class="stat-label">Dataset Items</span><span class="stat-ico i-yellow"><i class="bi bi-database"></i></span></div>
                     <div class="stat-value" th:text="${stats['items']}">0</div>
-                    <div class="stat-delta">Total imported texts</div>
+                    <div class="stat-delta">Texts imported for annotation</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-top"><span class="stat-label">Progress</span><span class="stat-ico i-green"><i class="bi bi-graph-up-arrow"></i></span></div>
+                <div class="stat accent-red">
+                    <div class="stat-top"><span class="stat-label">Progress</span><span class="stat-ico i-red"><i class="bi bi-graph-up-arrow"></i></span></div>
                     <div class="stat-value"><span th:text="${#numbers.formatDecimal(stats['progress'], 1, 1)}">0</span>%</div>
                     <div class="stat-delta">Overall completion</div>
                 </div>
-                <div class="stat">
-                    <div class="stat-top"><span class="stat-label">Agreement</span><span class="stat-ico i-violet"><i class="bi bi-check2-circle"></i></span></div>
+                <div class="stat accent-rose">
+                    <div class="stat-top"><span class="stat-label">Agreement</span><span class="stat-ico i-rose"><i class="bi bi-check2-circle"></i></span></div>
                     <div class="stat-value"><span th:text="${#numbers.formatDecimal(stats['agreementRate'], 1, 1)}">0</span>%</div>
-                    <div class="stat-delta">Inter-annotator rate</div>
+                    <div class="stat-delta">Inter-annotator consistency</div>
                 </div>
             </div>
 
@@ -114,9 +132,12 @@
                                 <h2 class="card-title">Suspicious annotators</h2>
                                 <p class="card-subtitle">Flagged by spam detection</p>
                             </div>
-                            <span class="stat-ico i-amber"><i class="bi bi-shield-exclamation"></i></span>
+                            <span class="stat-ico i-yellow"><i class="bi bi-shield-exclamation"></i></span>
                         </div>
-                        <p class="small-muted mb-0" th:if="${#lists.isEmpty(suspiciousUsers)}">No suspicious annotators detected.</p>
+                        <div class="empty-note" th:if="${#lists.isEmpty(suspiciousUsers)}">
+                            <span class="en-ico"><i class="bi bi-shield-check"></i></span>
+                            <span>All clear. No suspicious annotation behavior detected.</span>
+                        </div>
                         <div class="row-item" th:each="user : ${suspiciousUsers}">
                             <span class="row-ico" style="background:var(--amber-soft);color:var(--amber);"><i class="bi bi-exclamation-triangle"></i></span>
                             <div class="row-main">
@@ -134,15 +155,12 @@
                             <a class="btn-ghost-link" th:href="@{/admin/training}">View</a>
                         </div>
                         <p class="small-muted mb-0" th:if="${#lists.isEmpty(trainingRuns)}">No training run yet.</p>
-                        <div class="row-item" th:each="run : ${trainingRuns}">
-                            <span class="row-ico" style="background:var(--brand-soft);color:var(--brand);"><i class="bi bi-cpu"></i></span>
-                            <div class="row-main">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="tag success" th:text="${run.status}">SUCCESS</span>
-                                    <span class="row-meta" th:text="${run.startedAt}">date</span>
-                                </div>
-                                <div class="row-meta">Accuracy <span th:text="${run.accuracy}">0.86</span> &middot; F1 <span th:text="${run.f1Score}">0.84</span></div>
+                        <div class="log-card" th:each="run : ${trainingRuns}">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="tag success" th:text="${run.status}">SUCCESS</span>
+                                <span class="row-meta" th:text="${run.startedAt}">date</span>
                             </div>
+                            <div class="row-meta">Accuracy <strong th:text="${run.accuracy}">0.86</strong> &middot; F1 <strong th:text="${run.f1Score}">0.84</strong></div>
                         </div>
                     </div>
                 </div>

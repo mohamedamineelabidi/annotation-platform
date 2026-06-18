@@ -1,47 +1,48 @@
 package com.academic.annotation.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "dataset_item")
-public class DatasetItem {
+@Table(name = "dataset")
+public class Dataset {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String externalId;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String text1;
+    private String name;
 
     @Column(columnDefinition = "TEXT")
-    private String text2;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskType taskType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dataset_id")
-    private Dataset dataset;
+    private String createdBy;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "dataset", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
+    private List<DatasetClass> classes = new ArrayList<>();
 
     @PrePersist
     void prePersist() {
@@ -58,28 +59,20 @@ public class DatasetItem {
         this.id = id;
     }
 
-    public String getExternalId() {
-        return externalId;
+    public String getName() {
+        return name;
     }
 
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getText1() {
-        return text1;
+    public String getDescription() {
+        return description;
     }
 
-    public void setText1(String text1) {
-        this.text1 = text1;
-    }
-
-    public String getText2() {
-        return text2;
-    }
-
-    public void setText2(String text2) {
-        this.text2 = text2;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public TaskType getTaskType() {
@@ -90,12 +83,12 @@ public class DatasetItem {
         this.taskType = taskType;
     }
 
-    public Dataset getDataset() {
-        return dataset;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setDataset(Dataset dataset) {
-        this.dataset = dataset;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -106,7 +99,12 @@ public class DatasetItem {
         this.createdAt = createdAt;
     }
 
-    public String displayText() {
-        return text2 == null || text2.isBlank() ? text1 : text1 + " / " + text2;
+    public List<DatasetClass> getClasses() {
+        return classes;
+    }
+
+    public void addClass(DatasetClass datasetClass) {
+        datasetClass.setDataset(this);
+        this.classes.add(datasetClass);
     }
 }

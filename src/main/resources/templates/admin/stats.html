@@ -11,12 +11,16 @@
 <body>
 <div class="app-layout">
     <aside class="sidebar" id="sidebar">
-        <div class="brand">
-            <span class="brand-logo"><i class="bi bi-bounding-box-circles"></i></span>
-            <span class="brand-name">AnnotateAI</span>
-        </div>
+        <a class="brand" th:href="@{/admin/dashboard}">
+            <span class="brand-mark"><i class="bi bi-asterisk"></i></span>
+            <span class="brand-word">
+                <span class="brand-word-top">ANNOTATE</span>
+                <span class="brand-word-bottom">AI Studio</span>
+            </span>
+        </a>
         <nav class="side-nav">
             <a class="side-link" th:href="@{/admin/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="side-link" th:href="@{/admin/datasets}"><i class="bi bi-collection"></i> Datasets</a>
             <a class="side-link" th:href="@{/admin/users}"><i class="bi bi-people"></i> Users</a>
             <a class="side-link" th:href="@{/admin/import}"><i class="bi bi-cloud-arrow-up"></i> Import</a>
             <a class="side-link" th:href="@{/admin/labels}"><i class="bi bi-tags"></i> Labels</a>
@@ -39,6 +43,7 @@
     <div class="app-body">
         <header class="topbar">
             <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="bi bi-list"></i></button>
+            <div class="topbar-label"><span class="tl-k">Studio</span><span class="tl-v">Admin workspace</span></div>
             <div class="search"><i class="bi bi-search"></i><input type="text" placeholder="Search..."></div>
             <div class="topbar-actions"><span class="pill online"><span class="dot"></span> Online</span></div>
         </header>

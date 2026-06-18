@@ -27,13 +27,16 @@ public class UserManagementController {
     }
 
     @PostMapping
-    public String create(@RequestParam String username,
-                         @RequestParam String password,
-                         @RequestParam(defaultValue = "false") boolean enabled,
+    public String create(@RequestParam(required = false) String firstName,
+                         @RequestParam(required = false) String lastName,
+                         @RequestParam String username,
                          RedirectAttributes redirectAttributes) {
         try {
-            userService.saveAnnotator(null, username, password, enabled);
-            redirectAttributes.addFlashAttribute("message", "Annotator created.");
+            var account = userService.createAnnotatorWithGeneratedPassword(firstName, lastName, username);
+            redirectAttributes.addFlashAttribute("message",
+                    "Annotateur créé. Identifiant : " + account.login()
+                            + " — Mot de passe : " + account.password()
+                            + " (à communiquer maintenant, il ne sera plus affiché).");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -43,12 +46,14 @@ public class UserManagementController {
     @PostMapping("/{id}")
     public String update(@PathVariable Long id,
                          @RequestParam String username,
+                         @RequestParam(required = false) String firstName,
+                         @RequestParam(required = false) String lastName,
                          @RequestParam(required = false) String password,
                          @RequestParam(defaultValue = "false") boolean enabled,
                          RedirectAttributes redirectAttributes) {
         try {
-            userService.saveAnnotator(id, username, password, enabled);
-            redirectAttributes.addFlashAttribute("message", "Annotator updated.");
+            userService.saveAnnotator(id, username, firstName, lastName, password, enabled);
+            redirectAttributes.addFlashAttribute("message", "Annotateur mis à jour.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -58,8 +63,20 @@ public class UserManagementController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            userService.deleteAnnotator(id);
-            redirectAttributes.addFlashAttribute("message", "Annotator deleted.");
+            userService.deactivateAnnotator(id);
+            redirectAttributes.addFlashAttribute("message",
+                    "Annotateur désactivé. Ses annotations sont conservées.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/{id}/reactivate")
+    public String reactivate(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            userService.reactivateAnnotator(id);
+            redirectAttributes.addFlashAttribute("message", "Annotateur réactivé.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
