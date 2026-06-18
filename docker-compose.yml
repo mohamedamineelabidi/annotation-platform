@@ -1,0 +1,21 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: annotation-nlp-mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: annotation_nlp
+      MARIADB_USER: annotation
+      MARIADB_PASSWORD: annotation
+    ports:
+      - "3310:3306"
+    volumes:
+      - annotation-nlp-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  annotation-nlp-data:

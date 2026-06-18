@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Statistics - AnnotateAI</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <span class="brand-logo"><i class="bi bi-bounding-box-circles"></i></span>
+            <span class="brand-name">AnnotateAI</span>
+        </div>
+        <nav class="side-nav">
+            <a class="side-link" th:href="@{/annotator/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="side-link" th:href="@{/annotator/annotate}"><i class="bi bi-pencil-square"></i> Annotate</a>
+            <a class="side-link active" th:href="@{/annotator/stats}"><i class="bi bi-bar-chart"></i> Statistics</a>
+        </nav>
+        <div class="side-foot">
+            <div class="side-user">
+                <span class="avatar">AN</span>
+                <div><div class="side-user-name">Annotator</div><div class="side-user-role">Contributor</div></div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button class="btn btn-soft w-100" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            </form>
+        </div>
+    </aside>
+    <div class="app-body">
+        <header class="topbar">
+            <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="bi bi-list"></i></button>
+            <div class="search"><i class="bi bi-search"></i><input type="text" placeholder="Search..."></div>
+            <div class="topbar-actions"><span class="pill online"><span class="dot"></span> Online</span></div>
+        </header>
+        <main class="app-content">
+            <h1 class="page-title">My Statistics</h1>
+            <p class="page-sub">Your personal annotation activity and quality metrics.</p>
+            <div class="stat-grid">
+                <div class="stat">
+                    <div class="stat-top"><span class="stat-label">Annotated</span><span class="stat-ico i-brand"><i class="bi bi-pencil-square"></i></span></div>
+                    <div class="stat-value" th:text="${stats['annotations']}">0</div>
+                    <div class="stat-delta">Texts you labeled</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top"><span class="stat-label">Assigned</span><span class="stat-ico i-sky"><i class="bi bi-inbox"></i></span></div>
+                    <div class="stat-value" th:text="${stats['assigned']}">0</div>
+                    <div class="stat-delta">Total in queue</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top"><span class="stat-label">Progress</span><span class="stat-ico i-green"><i class="bi bi-graph-up-arrow"></i></span></div>
+                    <div class="stat-value"><span th:text="${#numbers.formatDecimal(stats['progress'], 1, 1)}">0</span>%</div>
+                    <div class="stat-delta">Completion rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-top"><span class="stat-label">Avg time</span><span class="stat-ico i-amber"><i class="bi bi-stopwatch"></i></span></div>
+                    <div class="stat-value"><span th:text="${#numbers.formatDecimal(averageTime, 1, 1)}">0</span>s</div>
+                    <div class="stat-delta">Per annotation</div>
+                </div>
+            </div>
+            <div class="ui-card" style="max-width:620px;">
+                <div class="card-head"><div><h2 class="card-title">Class distribution</h2><p class="card-subtitle">How your labels are spread</p></div></div>
+                <p class="small-muted mb-0" th:if="${#lists.isEmpty(distribution)}">No annotations yet.</p>
+                <table class="table align-middle" th:if="${!#lists.isEmpty(distribution)}">
+                    <thead><tr><th>Class</th><th>Count</th></tr></thead>
+                    <tbody>
+                    <tr th:each="row : ${distribution}">
+                        <td style="font-weight:600;" th:text="${row.labelName()}">positive</td>
+                        <td th:text="${row.count()}">0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>
