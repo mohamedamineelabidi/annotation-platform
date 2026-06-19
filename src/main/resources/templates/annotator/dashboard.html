@@ -21,7 +21,6 @@
             <a class="side-link active" th:href="@{/annotator/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
             <a class="side-link" th:href="@{/annotator/annotate}"><i class="bi bi-pencil-square"></i> Annotate</a>
             <a class="side-link" th:href="@{/annotator/tasks}"><i class="bi bi-list-check"></i> Tâches</a>
-            <a class="side-link" th:href="@{/annotator/stats}"><i class="bi bi-bar-chart"></i> Statistics</a>
         </nav>
         <div class="side-foot">
             <div class="side-user">
@@ -84,22 +83,22 @@
                             <h2 class="card-title">Continue your work</h2>
                             <p class="card-subtitle">Pick up where you left off</p>
                         </div>
-                        <a class="btn-ghost-link" th:href="@{/annotator/stats}">My stats <i class="bi bi-arrow-right"></i></a>
+                        <a class="btn-ghost-link" th:href="@{/annotator/tasks}">My tasks <i class="bi bi-arrow-right"></i></a>
                     </div>
-                    <div th:if="${nextAssignment == null}" class="row-item">
+                    <div th:if="${nextTask == null}" class="row-item">
                         <span class="row-ico" style="background:var(--green-soft);color:var(--green);"><i class="bi bi-check-all"></i></span>
                         <div class="row-main">
                             <div class="row-name">All caught up</div>
                             <div class="row-meta">All assigned texts are completed.</div>
                         </div>
                     </div>
-                    <div th:if="${nextAssignment != null}" class="row-item">
+                    <div th:if="${nextTask != null}" class="row-item">
                         <span class="row-ico" style="background:var(--brand-soft);color:var(--brand);"><i class="bi bi-pencil-square"></i></span>
                         <div class="row-main">
                             <div class="row-name">Next text ready</div>
                             <div class="row-meta">A new annotation task is waiting for you.</div>
                         </div>
-                        <a class="btn btn-primary" th:href="@{/annotator/annotate(itemId=${nextAssignment.datasetItem.id})}">Continue <i class="bi bi-arrow-right"></i></a>
+                        <a class="btn btn-primary" th:href="@{/annotator/tasks/{id}/work(id=${nextTask.id})}">Continue <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="stack">
@@ -123,7 +122,7 @@
                         <h2 class="card-title mb-3">Quick actions</h2>
                         <div class="btn-block-list">
                             <a class="btn btn-primary" th:href="@{/annotator/annotate}"><i class="bi bi-pencil-square"></i> Start annotating</a>
-                            <a class="btn btn-soft" th:href="@{/annotator/stats}"><i class="bi bi-bar-chart"></i> View my statistics</a>
+                            <a class="btn btn-soft" th:href="@{/annotator/tasks}"><i class="bi bi-list-check"></i> View my tasks</a>
                         </div>
                     </div>
                 </div>

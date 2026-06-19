@@ -4,7 +4,7 @@ import com.academic.annotation.model.Assignment;
 import com.academic.annotation.model.User;
 import com.academic.annotation.service.AnnotationService;
 import com.academic.annotation.service.DatasetService;
-import com.academic.annotation.service.StatsService;
+import com.academic.annotation.service.TaskService;
 import com.academic.annotation.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,23 +25,23 @@ public class AnnotationController {
     private final AnnotationService annotationService;
     private final DatasetService datasetService;
     private final UserService userService;
-    private final StatsService statsService;
+    private final TaskService taskService;
 
     public AnnotationController(AnnotationService annotationService,
                                 DatasetService datasetService,
                                 UserService userService,
-                                StatsService statsService) {
+                                TaskService taskService) {
         this.annotationService = annotationService;
         this.datasetService = datasetService;
         this.userService = userService;
-        this.statsService = statsService;
+        this.taskService = taskService;
     }
 
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
-        model.addAttribute("stats", statsService.personalStats(user));
-        model.addAttribute("nextAssignment", annotationService.firstPending(user.getUsername()).orElse(null));
+        model.addAttribute("stats", taskService.personalStats(user));
+        model.addAttribute("nextTask", taskService.firstIncompleteTask(user).orElse(null));
         return "annotator/dashboard";
     }
 
@@ -95,14 +95,5 @@ public class AnnotationController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/annotator/annotate?itemId=" + itemId;
         }
-    }
-
-    @GetMapping("/stats")
-    public String stats(Principal principal, Model model) {
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("stats", statsService.personalStats(user));
-        model.addAttribute("distribution", annotationService.classDistribution(user));
-        model.addAttribute("averageTime", annotationService.averageTime(user));
-        return "annotator/stats";
     }
 }

@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -97,6 +100,40 @@ public class TaskService {
                     annotator.getFirstName(), annotator.getLastName(), size, progress));
         }
         return result;
+    }
+
+    /**
+     * Aggregated progress for an annotator across all active tasks, based on the
+     * couples they actually have to annotate (TaskItem), so the dashboard reflects
+     * real work done.
+     */
+    public Map<String, Object> personalStats(User annotator) {
+        long assigned = 0;
+        long completed = 0;
+        for (Task task : taskRepository.findByAnnotatorAndActiveTrueOrderByIdDesc(annotator)) {
+            assigned += taskItemRepository.countByTask(task);
+            completed += taskItemRepository.countByTaskAndCompleted(task, true);
+        }
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("assigned", assigned);
+        stats.put("completed", completed);
+        stats.put("progress", assigned == 0 ? 0.0 : completed * 100.0 / assigned);
+        return stats;
+    }
+
+    /**
+     * First active task that still has couples left to annotate, used by the
+     * dashboard "Continue your work" shortcut.
+     */
+    public Optional<Task> firstIncompleteTask(User annotator) {
+        for (Task task : taskRepository.findByAnnotatorAndActiveTrueOrderByIdDesc(annotator)) {
+            long size = taskItemRepository.countByTask(task);
+            long done = taskItemRepository.countByTaskAndCompleted(task, true);
+            if (done < size) {
+                return Optional.of(task);
+            }
+        }
+        return Optional.empty();
     }
 
     public List<TaskSummary> tasksFor(User annotator) {
