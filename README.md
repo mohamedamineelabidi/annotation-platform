@@ -2,24 +2,39 @@
 
 Academic mini-project: collaborative annotation platform for supervised NLP classification.
 
+Developed by **Rida Aderkane** and **Mohamed Amine El Abidi**.
+
 ## Requirements
 
 - Java 17
-- Docker Desktop
-- Maven or the included Maven Wrapper
-- Python available as `python` or set `PYTHON_EXECUTABLE`
+- Maven or the included Maven Wrapper (only needed to build)
+- Python available as `python` or set `PYTHON_EXECUTABLE` (optional, for the training feature)
 
-## Run
+## Run (standalone)
+
+The application ships with an embedded H2 database and initializes all required data
+(users, labels, sample dataset) automatically at startup. No external database is required.
 
 ```powershell
-docker compose up -d
-.\mvnw clean package -DskipTests
+.\mvnw clean package
 java -jar target\app.jar
 ```
 
 Open http://localhost:8080.
 
-The MariaDB container is exposed on local port `3310` to avoid common local MySQL/MariaDB conflicts. Override the connection with `DB_URL`, `DB_USER`, and `DB_PASSWORD` if needed.
+## Run with MariaDB (optional)
+
+To use MariaDB instead of the embedded database, start the bundled container and
+override the connection settings:
+
+```powershell
+docker compose up -d
+$env:DB_URL="jdbc:mariadb://localhost:3310/annotation_nlp"
+$env:DB_USER="annotation"; $env:DB_PASSWORD="annotation"; $env:DB_DRIVER="org.mariadb.jdbc.Driver"
+java -jar target\app.jar
+```
+
+The MariaDB container is exposed on local port `3310` to avoid common local MySQL/MariaDB conflicts.
 
 ## Accounts
 
