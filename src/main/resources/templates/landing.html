@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LabelCraft — Plateforme d'annotation NLP</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        body.landing {
+            background:
+                radial-gradient(1100px 520px at 88% -8%, var(--pink-soft) 0%, transparent 60%),
+                radial-gradient(900px 520px at -6% 8%, var(--yellow-soft) 0%, transparent 55%),
+                var(--brand-cream);
+            color: var(--brand-dark);
+            min-height: 100vh;
+        }
+        .lp-shell { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Nav */
+        .lp-nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.4rem 0; position: sticky; top: 0; z-index: 30;
+            backdrop-filter: blur(8px);
+        }
+        .lp-brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+        .lp-brand .brand-mark {
+            width: 36px; height: 36px; display: grid; place-items: center;
+            color: var(--brand-orange); font-size: 1.7rem;
+        }
+        .lp-brand .lp-word { font-family: var(--font-head); font-weight: 700; font-size: 1.3rem; color: var(--brand-dark); letter-spacing: -0.01em; }
+        .lp-nav-links { display: flex; align-items: center; gap: 2rem; }
+        .lp-nav-links a { color: var(--brand-dark); text-decoration: none; font-weight: 500; font-size: 0.96rem; opacity: 0.78; }
+        .lp-nav-links a:hover { opacity: 1; }
+        .lp-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--font-head); font-weight: 600; font-size: 0.96rem;
+            padding: 0.7rem 1.3rem; border-radius: 999px; text-decoration: none;
+            border: 1.5px solid transparent; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+        }
+        .lp-btn-primary { background: var(--brand-red); color: #fff; box-shadow: 0 10px 22px rgba(228,61,18,0.28); }
+        .lp-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(228,61,18,0.34); color:#fff; }
+        .lp-btn-ghost { background: transparent; color: var(--brand-dark); border-color: var(--border-strong); }
+        .lp-btn-ghost:hover { transform: translateY(-2px); border-color: var(--brand-dark); }
+        .lp-btn-lg { padding: 0.95rem 1.7rem; font-size: 1.04rem; }
+
+        /* Hero */
+        .lp-hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3rem; align-items: center; padding: 3.5rem 0 4rem; }
+        .lp-eyebrow {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: var(--brand-card); border: 1px solid var(--border);
+            color: var(--brand-red); font-weight: 600; font-size: 0.82rem;
+            padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 1.3rem;
+            font-family: var(--font-head); letter-spacing: 0.02em;
+        }
+        .lp-eyebrow i { color: var(--brand-orange); }
+        .lp-hero h1 {
+            font-family: var(--font-head); font-weight: 700; line-height: 1.04;
+            font-size: clamp(2.4rem, 5vw, 3.7rem); letter-spacing: -0.02em; margin: 0 0 1.1rem;
+        }
+        .lp-hero h1 .accent { color: var(--brand-red); }
+        .lp-hero h1 .underline { position: relative; white-space: nowrap; }
+        .lp-hero h1 .underline::after {
+            content: ""; position: absolute; left: 0; right: 0; bottom: 0.08em; height: 0.28em;
+            background: var(--brand-yellow); border-radius: 4px; z-index: -1; opacity: .85;
+        }
+        .lp-lead { font-size: 1.12rem; line-height: 1.6; color: var(--brand-muted); max-width: 33rem; margin-bottom: 1.8rem; }
+        .lp-cta-row { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+        .lp-cred { margin-top: 1.6rem; font-size: 0.86rem; color: var(--text-soft); }
+        .lp-cred code { background: var(--brand-card); border: 1px solid var(--border); padding: 0.1rem 0.45rem; border-radius: 6px; color: var(--brand-dark); }
+
+        /* Hero visual */
+        .lp-visual { position: relative; }
+        .lp-card {
+            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+            box-shadow: 0 24px 60px rgba(30,30,26,0.12); padding: 1.4rem;
+        }
+        .lp-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+        .lp-card-tag { font-family: var(--font-head); font-size: 0.78rem; font-weight: 600; color: var(--brand-muted); text-transform: uppercase; letter-spacing: 0.12em; }
+        .lp-badge-ok { background: var(--green-soft); color: var(--green); font-size: 0.74rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; }
+        .lp-couple { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .lp-text { background: var(--brand-card); border-radius: 12px; padding: 0.8rem 0.9rem; font-size: 0.92rem; color: var(--brand-dark); margin-bottom: 0.9rem; }
+        .lp-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .lp-chip { font-size: 0.84rem; font-weight: 600; padding: 0.4rem 0.85rem; border-radius: 999px; border: 1.5px solid var(--border); color: var(--brand-dark); background: #fff; }
+        .lp-chip.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
+        .lp-float {
+            position: absolute; left: -1.6rem; bottom: -1.7rem; background: #fff;
+            border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 18px 44px rgba(30,30,26,0.14);
+            padding: 0.9rem 1.1rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .lp-float .ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--rose-soft); color: var(--brand-rose); font-size: 1.2rem; }
+        .lp-float .v { font-family: var(--font-head); font-weight: 700; font-size: 1.25rem; line-height: 1; }
+        .lp-float .l { font-size: 0.76rem; color: var(--brand-muted); }
+        .lp-float.tr { left: auto; right: -1.2rem; top: -1.4rem; bottom: auto; }
+        .lp-float.tr .ic { background: var(--yellow-soft); color: var(--amber); }
+
+        /* Stat strip */
+        .lp-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding: 1.6rem 0 0.5rem; }
+        .lp-strip .n { font-family: var(--font-head); font-weight: 700; font-size: 1.9rem; color: var(--brand-dark); }
+        .lp-strip .t { font-size: 0.9rem; color: var(--brand-muted); }
+
+        /* Sections */
+        .lp-section { padding: 4.5rem 0; }
+        .lp-section-head { text-align: center; max-width: 38rem; margin: 0 auto 2.8rem; }
+        .lp-section-head .kicker { font-family: var(--font-head); font-weight: 600; color: var(--brand-rose); letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.82rem; }
+        .lp-section-head h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.8rem, 3.4vw, 2.5rem); letter-spacing: -0.02em; margin: 0.6rem 0 0.7rem; }
+        .lp-section-head p { color: var(--brand-muted); font-size: 1.05rem; }
+
+        .lp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.3rem; }
+        .lp-feature { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; transition: transform .15s ease, box-shadow .15s ease; }
+        .lp-feature:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(30,30,26,0.10); }
+        .lp-feature .ic { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-size: 1.4rem; margin-bottom: 1rem; }
+        .ic-red { background: var(--red-soft); color: var(--brand-red); }
+        .ic-rose { background: var(--rose-soft); color: var(--brand-rose); }
+        .ic-yellow { background: var(--yellow-soft); color: var(--amber); }
+        .ic-green { background: var(--green-soft); color: var(--green); }
+        .lp-feature h3 { font-family: var(--font-head); font-weight: 700; font-size: 1.18rem; margin-bottom: 0.5rem; }
+        .lp-feature p { color: var(--brand-muted); font-size: 0.96rem; margin: 0; line-height: 1.55; }
+
+        /* Steps */
+        .lp-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; counter-reset: step; }
+        .lp-step { position: relative; background: var(--brand-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.7rem 1.5rem; }
+        .lp-step::before {
+            counter-increment: step; content: counter(step, decimal-leading-zero);
+            font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; color: #fff;
+            width: 40px; height: 40px; border-radius: 12px; background: var(--brand-red);
+            display: grid; place-items: center; margin-bottom: 0.9rem;
+        }
+        .lp-step h4 { font-family: var(--font-head); font-weight: 700; font-size: 1.08rem; margin-bottom: 0.4rem; }
+        .lp-step p { color: var(--brand-muted); font-size: 0.94rem; margin: 0; }
+
+        /* Metrics band */
+        .lp-band { background: var(--brand-dark); color: var(--brand-cream); border-radius: 26px; padding: 3rem; }
+        .lp-band-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+        .lp-band h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.7rem, 3vw, 2.3rem); letter-spacing: -0.02em; margin-bottom: 0.8rem; }
+        .lp-band p { color: rgba(235,233,225,0.72); margin-bottom: 1.3rem; }
+        .lp-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+        .lp-metric { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 1.1rem; }
+        .lp-metric .mv { font-family: var(--font-head); font-weight: 700; font-size: 1.7rem; color: var(--brand-yellow); }
+        .lp-metric .ml { font-size: 0.86rem; color: rgba(235,233,225,0.72); }
+
+        /* Final CTA */
+        .lp-final { text-align: center; background: #fff; border: 1px solid var(--border); border-radius: 26px; padding: 3.4rem 2rem; box-shadow: 0 24px 60px rgba(30,30,26,0.08); }
+        .lp-final h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.9rem, 3.4vw, 2.6rem); letter-spacing: -0.02em; margin-bottom: 0.7rem; }
+        .lp-final p { color: var(--brand-muted); font-size: 1.05rem; margin-bottom: 1.6rem; }
+
+        /* Footer */
+        .lp-footer { border-top: 1px solid var(--border); padding: 2.2rem 0 3rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
+        .lp-footer .muted { color: var(--brand-muted); font-size: 0.9rem; }
+        .lp-tech { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .lp-tech span { font-size: 0.8rem; font-weight: 600; color: var(--brand-muted); background: var(--brand-card); border: 1px solid var(--border); padding: 0.3rem 0.7rem; border-radius: 999px; }
+
+        @media (max-width: 900px) {
+            .lp-hero { grid-template-columns: 1fr; gap: 3.5rem; }
+            .lp-strip { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+            .lp-grid, .lp-steps, .lp-band-grid, .lp-metrics { grid-template-columns: 1fr; }
+            .lp-nav-links a:not(.lp-btn) { display: none; }
+            .lp-band { padding: 2rem; }
+        }
+    </style>
+</head>
+<body class="landing">
+<div class="lp-shell">
+
+    <!-- Nav -->
+    <nav class="lp-nav">
+        <a class="lp-brand" th:href="@{/}">
+            <span class="brand-mark"><i class="bi bi-asterisk"></i></span>
+            <span class="lp-word">LabelCraft</span>
+        </a>
+        <div class="lp-nav-links">
+            <a href="#features">Fonctionnalités</a>
+            <a href="#how">Comment ça marche</a>
+            <a href="#metrics">Métriques</a>
+            <a class="lp-btn lp-btn-primary" th:href="@{/login}"><i class="bi bi-box-arrow-in-right"></i> Se connecter</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="lp-hero">
+        <div>
+            <span class="lp-eyebrow"><i class="bi bi-stars"></i> Annotation NLP supervisée</span>
+            <h1>Annotez vos données,<br><span class="underline accent">mesurez l'accord</span>, entraînez mieux.</h1>
+            <p class="lp-lead">
+                LabelCraft est une plateforme collaborative d'annotation de texte pour la classification NLP.
+                Importez vos datasets, affectez des annotateurs et évaluez la qualité avec des métriques
+                d'accord inter-annotateurs avancées.
+            </p>
+            <div class="lp-cta-row">
+                <a class="lp-btn lp-btn-primary lp-btn-lg" th:href="@{/login}"><i class="bi bi-play-fill"></i> Commencer</a>
+                <a class="lp-btn lp-btn-ghost lp-btn-lg" href="#features"><i class="bi bi-grid-1x2"></i> Découvrir</a>
+            </div>
+            <p class="lp-cred">Démo : <code>admin / admin</code> · <code>user1 / user1</code></p>
+        </div>
+
+        <div class="lp-visual">
+            <div class="lp-card">
+                <div class="lp-card-top">
+                    <span class="lp-card-tag">Couple D1-1</span>
+                    <span class="lp-badge-ok"><i class="bi bi-check-lg"></i> Annoté</span>
+                </div>
+                <div class="lp-couple">Classification d'avis</div>
+                <div class="lp-text">« Ce produit est excellent, je recommande vivement. »</div>
+                <div class="lp-chips">
+                    <span class="lp-chip active">positif</span>
+                    <span class="lp-chip">négatif</span>
+                    <span class="lp-chip">neutre</span>
+                </div>
+            </div>
+            <div class="lp-float tr">
+                <span class="ic"><i class="bi bi-graph-up-arrow"></i></span>
+                <span><span class="v">0.667</span><br><span class="l">Accord en %</span></span>
+            </div>
+            <div class="lp-float">
+                <span class="ic"><i class="bi bi-people-fill"></i></span>
+                <span><span class="v">2</span><br><span class="l">Annotateurs</span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stat strip -->
+    <div class="lp-strip">
+        <div><div class="n">4</div><div class="t">Métriques d'accord</div></div>
+        <div><div class="n">CSV</div><div class="t">Import en un clic</div></div>
+        <div><div class="n">∞</div><div class="t">Classes personnalisées</div></div>
+        <div><div class="n">1&nbsp;JAR</div><div class="t">Déploiement simple</div></div>
+    </div>
+
+    <!-- Features -->
+    <section class="lp-section" id="features">
+        <div class="lp-section-head">
+            <span class="kicker">Fonctionnalités</span>
+            <h2>Tout ce qu'il faut pour annoter en équipe</h2>
+            <p>De l'import des données jusqu'à l'évaluation de la qualité, un flux complet et structuré.</p>
+        </div>
+        <div class="lp-grid">
+            <div class="lp-feature">
+                <div class="ic ic-red"><i class="bi bi-cloud-arrow-up"></i></div>
+                <h3>Datasets & import CSV</h3>
+                <p>Créez des jeux de données, définissez vos classes et importez des couples de textes via un simple fichier CSV.</p>
+            </div>
+            <div class="lp-feature">
+                <div class="ic ic-rose"><i class="bi bi-pencil-square"></i></div>
+                <h3>Annotation collaborative</h3>
+                <p>Interface dédiée pour annoter chaque couple, naviguer entre les items et valider, avec suivi de l'avancement.</p>
+            </div>
+            <div class="lp-feature">
+                <div class="ic ic-yellow"><i class="bi bi-bar-chart-line"></i></div>
+                <h3>Métriques d'accord</h3>
+                <p>Pourcentage d'accord, Kappa de Cohen, Kappa de Fleiss et Alpha de Krippendorff calculés automatiquement.</p>
+            </div>
+            <div class="lp-feature">
+                <div class="ic ic-green"><i class="bi bi-person-gear"></i></div>
+                <h3>Gestion des annotateurs</h3>
+                <p>Création de comptes avec mot de passe généré, affectation avec dates limites et désactivation logique.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="lp-section" id="how">
+        <div class="lp-section-head">
+            <span class="kicker">Comment ça marche</span>
+            <h2>Du dataset aux résultats en 3 étapes</h2>
+        </div>
+        <div class="lp-steps">
+            <div class="lp-step">
+                <h4>Importez & configurez</h4>
+                <p>L'administrateur crée un dataset, définit les classes et importe les couples de textes par CSV.</p>
+            </div>
+            <div class="lp-step">
+                <h4>Affectez & annotez</h4>
+                <p>Les annotateurs reçoivent leurs tâches avec une date limite et annotent chaque couple.</p>
+            </div>
+            <div class="lp-step">
+                <h4>Mesurez la qualité</h4>
+                <p>La plateforme calcule l'accord inter-annotateurs pour évaluer la cohérence des annotations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics band -->
+    <section class="lp-section" id="metrics">
+        <div class="lp-band">
+            <div class="lp-band-grid">
+                <div>
+                    <h2>Une qualité d'annotation mesurée scientifiquement</h2>
+                    <p>Quatre indicateurs corrigés du hasard pour quantifier l'accord entre vos annotateurs et fiabiliser vos jeux d'entraînement.</p>
+                    <a class="lp-btn lp-btn-primary lp-btn-lg" th:href="@{/login}"><i class="bi bi-box-arrow-in-right"></i> Accéder à la plateforme</a>
+                </div>
+                <div class="lp-metrics">
+                    <div class="lp-metric"><div class="mv">%</div><div class="ml">Accord en pourcentage</div></div>
+                    <div class="lp-metric"><div class="mv">κ</div><div class="ml">Kappa de Cohen</div></div>
+                    <div class="lp-metric"><div class="mv">κ<sub>F</sub></div><div class="ml">Kappa de Fleiss</div></div>
+                    <div class="lp-metric"><div class="mv">α</div><div class="ml">Alpha de Krippendorff</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="lp-section" style="padding-top:0;">
+        <div class="lp-final">
+            <h2>Prêt à annoter ?</h2>
+            <p>Connectez-vous et lancez votre première campagne d'annotation en quelques minutes.</p>
+            <a class="lp-btn lp-btn-primary lp-btn-lg" th:href="@{/login}"><i class="bi bi-box-arrow-in-right"></i> Se connecter</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="lp-footer">
+        <div>
+            <a class="lp-brand" th:href="@{/}" style="margin-bottom:0.4rem;">
+                <span class="brand-mark"><i class="bi bi-asterisk"></i></span>
+                <span class="lp-word">LabelCraft</span>
+            </a>
+            <div class="muted">Développé par Rida Aderkane &amp; Mohamed Amine El Abidi</div>
+        </div>
+        <div class="lp-tech">
+            <span>Spring Boot</span>
+            <span>Thymeleaf</span>
+            <span>Spring Security</span>
+            <span>JPA / Hibernate</span>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

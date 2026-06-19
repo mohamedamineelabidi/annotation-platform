@@ -56,7 +56,7 @@ public class SecurityConfig {
                                             DaoAuthenticationProvider authenticationProvider) throws Exception {
         http.authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/webjars/**", "/login").permitAll()
+                        .requestMatchers("/", "/css/**", "/webjars/**", "/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/annotator/**").hasRole("ANNOTATOR")
                         .anyRequest().authenticated()
