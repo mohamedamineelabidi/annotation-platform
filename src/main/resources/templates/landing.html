@@ -10,6 +10,8 @@
     <style>
         body.landing {
             background:
+                radial-gradient(circle at 80% 20%, rgba(255,162,182,0.35), transparent 30%),
+                radial-gradient(circle at 15% 85%, rgba(239,177,29,0.22), transparent 25%),
                 radial-gradient(1100px 520px at 88% -8%, var(--pink-soft) 0%, transparent 60%),
                 radial-gradient(900px 520px at -6% 8%, var(--yellow-soft) 0%, transparent 55%),
                 var(--brand-cream);
@@ -47,7 +49,8 @@
         .lp-btn-lg { padding: 0.95rem 1.7rem; font-size: 1.04rem; }
 
         /* Hero */
-        .lp-hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3rem; align-items: center; padding: 3.5rem 0 4rem; }
+        .lp-hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: 3.2rem; align-items: center; min-height: 85vh; padding: 3rem 0 4rem; }
+        .hero-content { max-width: 540px; }
         .lp-eyebrow {
             display: inline-flex; align-items: center; gap: 0.5rem;
             background: var(--brand-card); border: 1px solid var(--border);
@@ -57,8 +60,8 @@
         }
         .lp-eyebrow i { color: var(--brand-orange); }
         .lp-hero h1 {
-            font-family: var(--font-head); font-weight: 700; line-height: 1.04;
-            font-size: clamp(2.4rem, 5vw, 3.7rem); letter-spacing: -0.02em; margin: 0 0 1.1rem;
+            font-family: var(--font-head); font-weight: 700; line-height: 1.05;
+            font-size: 56px; letter-spacing: -0.02em; margin: 0 0 1.1rem;
         }
         .lp-hero h1 .accent { color: var(--brand-red); }
         .lp-hero h1 .underline { position: relative; white-space: nowrap; }
@@ -72,29 +75,20 @@
         .lp-cred code { background: var(--brand-card); border: 1px solid var(--border); padding: 0.1rem 0.45rem; border-radius: 6px; color: var(--brand-dark); }
 
         /* Hero visual */
-        .lp-visual { position: relative; }
-        .lp-card {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
-            box-shadow: 0 24px 60px rgba(30,30,26,0.12); padding: 1.4rem 1.4rem 3.4rem;
+        .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+        .hero-visual img {
+            position: relative; z-index: 2;
+            width: 100%; max-width: 720px; height: auto; display: block;
+            border-radius: 28px;
+            box-shadow: 0 36px 80px rgba(228,61,18,0.16), 0 14px 36px rgba(30,30,26,0.12);
         }
-        .lp-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-        .lp-card-tag { font-family: var(--font-head); font-size: 0.78rem; font-weight: 600; color: var(--brand-muted); text-transform: uppercase; letter-spacing: 0.12em; }
-        .lp-badge-ok { background: var(--green-soft); color: var(--green); font-size: 0.74rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; }
-        .lp-couple { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
-        .lp-text { background: var(--brand-card); border-radius: 12px; padding: 0.8rem 0.9rem; font-size: 0.92rem; color: var(--brand-dark); margin-bottom: 0.9rem; }
-        .lp-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .lp-chip { font-size: 0.84rem; font-weight: 600; padding: 0.4rem 0.85rem; border-radius: 999px; border: 1.5px solid var(--border); color: var(--brand-dark); background: #fff; }
-        .lp-chip.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
-        .lp-float {
-            position: absolute; left: -1rem; bottom: -1.6rem; background: #fff; z-index: 2;
-            border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 18px 44px rgba(30,30,26,0.14);
-            padding: 0.65rem 0.9rem; display: flex; align-items: center; gap: 0.7rem;
-        }
-        .lp-float .ic { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: var(--rose-soft); color: var(--brand-rose); font-size: 1.1rem; flex: none; }
-        .lp-float .v { font-family: var(--font-head); font-weight: 700; font-size: 1.15rem; line-height: 1; }
-        .lp-float .l { font-size: 0.74rem; color: var(--brand-muted); }
-        .lp-float.tr { left: auto; right: -1rem; bottom: -1.6rem; top: auto; }
-        .lp-float.tr .ic { background: var(--yellow-soft); color: var(--amber); }
+        .hero-shape { position: absolute; border-radius: 50%; z-index: 1; }
+        .hero-shape.s-pink { width: 250px; height: 250px; background: var(--brand-pink); opacity: 0.5; top: -46px; right: -40px; filter: blur(8px); }
+        .hero-shape.s-yellow { width: 190px; height: 190px; background: var(--brand-yellow); opacity: 0.32; bottom: -50px; right: 56px; filter: blur(10px); }
+        .hero-shape.s-red { width: 140px; height: 140px; background: var(--brand-red); opacity: 0.18; bottom: 24px; left: -54px; filter: blur(8px); }
+        .hero-dots { position: absolute; z-index: 1; width: 120px; height: 120px; top: 8px; left: -64px;
+            background-image: radial-gradient(var(--brand-muted) 1.6px, transparent 1.6px);
+            background-size: 16px 16px; opacity: 0.35; }
 
         /* Stat strip */
         .lp-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding: 1.6rem 0 0.5rem; }
@@ -153,11 +147,18 @@
         .lp-tech span { font-size: 0.8rem; font-weight: 600; color: var(--brand-muted); background: var(--brand-card); border: 1px solid var(--border); padding: 0.3rem 0.7rem; border-radius: 999px; }
 
         @media (max-width: 900px) {
-            .lp-hero { grid-template-columns: 1fr; gap: 3.5rem; }
+            .lp-hero { grid-template-columns: 1fr; gap: 2.6rem; min-height: auto; padding-top: 2rem; }
+            .hero-content { max-width: none; }
+            .lp-hero h1 { font-size: 38px; }
+            .hero-shape.s-pink { width: 180px; height: 180px; top: -30px; right: -20px; }
+            .hero-dots { display: none; }
             .lp-strip { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
             .lp-grid, .lp-steps, .lp-band-grid, .lp-metrics { grid-template-columns: 1fr; }
             .lp-nav-links a:not(.lp-btn) { display: none; }
             .lp-band { padding: 2rem; }
+        }
+        @media (max-width: 600px) {
+            .lp-hero h1 { font-size: 32px; }
         }
     </style>
 </head>
@@ -180,43 +181,26 @@
 
     <!-- Hero -->
     <header class="lp-hero">
-        <div>
-            <span class="lp-eyebrow"><i class="bi bi-stars"></i> Annotation NLP supervisée</span>
-            <h1>Annotez vos données,<br><span class="underline accent">mesurez l'accord</span>, entraînez mieux.</h1>
+        <div class="hero-content">
+            <span class="lp-eyebrow"><i class="bi bi-stars"></i> AI Annotation Studio</span>
+            <h1>Turn raw text into <span class="accent">reliable NLP labels</span>.</h1>
             <p class="lp-lead">
-                LabelCraft est une plateforme collaborative d'annotation de texte pour la classification NLP.
-                Importez vos datasets, affectez des annotateurs et évaluez la qualité avec des métriques
-                d'accord inter-annotateurs avancées.
+                Import datasets, generate AI suggestions, review annotations, and keep every label
+                consistent from one clean workspace.
             </p>
             <div class="lp-cta-row">
-                <a class="lp-btn lp-btn-primary lp-btn-lg" th:href="@{/login}"><i class="bi bi-play-fill"></i> Commencer</a>
-                <a class="lp-btn lp-btn-ghost lp-btn-lg" href="#features"><i class="bi bi-grid-1x2"></i> Découvrir</a>
+                <a class="lp-btn lp-btn-primary lp-btn-lg" th:href="@{/login}"><i class="bi bi-play-fill"></i> Start Annotating</a>
+                <a class="lp-btn lp-btn-ghost lp-btn-lg" th:href="@{/login}"><i class="bi bi-speedometer2"></i> View Dashboard</a>
             </div>
-            <p class="lp-cred">Démo : <code>admin / admin</code> · <code>user1 / user1</code></p>
+            <p class="lp-cred">Demo : <code>admin / admin</code> · <code>user1 / user1</code></p>
         </div>
 
-        <div class="lp-visual">
-            <div class="lp-card">
-                <div class="lp-card-top">
-                    <span class="lp-card-tag">Couple D1-1</span>
-                    <span class="lp-badge-ok"><i class="bi bi-check-lg"></i> Annoté</span>
-                </div>
-                <div class="lp-couple">Classification d'avis</div>
-                <div class="lp-text">« Ce produit est excellent, je recommande vivement. »</div>
-                <div class="lp-chips">
-                    <span class="lp-chip active">positif</span>
-                    <span class="lp-chip">négatif</span>
-                    <span class="lp-chip">neutre</span>
-                </div>
-            </div>
-            <div class="lp-float tr">
-                <span class="ic"><i class="bi bi-graph-up-arrow"></i></span>
-                <span><span class="v">0.667</span><br><span class="l">Accord en %</span></span>
-            </div>
-            <div class="lp-float">
-                <span class="ic"><i class="bi bi-people-fill"></i></span>
-                <span><span class="v">2</span><br><span class="l">Annotateurs</span></span>
-            </div>
+        <div class="hero-visual">
+            <span class="hero-shape s-pink"></span>
+            <span class="hero-shape s-yellow"></span>
+            <span class="hero-shape s-red"></span>
+            <span class="hero-dots"></span>
+            <img th:src="@{/images/hero-labelcraft-dashboard.png}" alt="LabelCraft AI annotation dashboard preview">
         </div>
     </header>
 
