@@ -1,4 +1,4 @@
-# 🧠 NLP Annotation Platform
+# NLP Annotation Platform
 
 > A collaborative web platform for building, annotating and evaluating supervised NLP datasets — text classification, text-pair similarity and natural language inference (NLI).
 
@@ -19,26 +19,26 @@ Developed by **Rida Aderkane** and **Mohamed Amine El Abidi**.
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Quick Start](#-quick-start)
-- [Running with MariaDB](#-running-with-mariadb-optional)
-- [Default Accounts](#-default-accounts)
-- [CSV Import Format](#-csv-import-format)
-- [Inter-Annotator Agreement](#-inter-annotator-agreement)
-- [Model Training](#-model-training)
-- [Project Structure](#-project-structure)
-- [Configuration](#-configuration)
-- [Authors](#-authors)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Quick Start](#quick-start)
+- [Running with MariaDB](#running-with-mariadb-optional)
+- [Default Accounts](#default-accounts)
+- [CSV Import Format](#csv-import-format)
+- [Inter-Annotator Agreement](#inter-annotator-agreement)
+- [Model Training](#model-training)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Authors](#authors)
 
 ---
 
-## ✨ Features
+## Features
 
-### 👥 For Administrators
+### For Administrators
 - **User management** — create annotators, enable/disable accounts, assign roles.
 - **Dataset management** — create datasets, define their label sets and task type.
 - **CSV import** — bulk-load items for single-text or text-pair tasks.
@@ -48,13 +48,13 @@ Developed by **Rida Aderkane** and **Mohamed Amine El Abidi**.
 - **Data export** — download all annotations as CSV (gold standard).
 - **Model training** — launch a baseline classifier and view accuracy / F1 metrics.
 
-### 🏷️ For Annotators
+### For Annotators
 - **Personal dashboard** — assigned tasks and progress at a glance.
 - **Guided annotation** — label items one by one with the dataset's label set.
 - **Multi-task support** — single text, text pairs and NLI premises/hypotheses.
 - **Time tracking** — per-item annotation time (used for quality checks).
 
-### 🧪 Supported Task Types
+### Supported Task Types
 | Task | Description | Example labels |
 |------|-------------|----------------|
 | `TEXT_CLASSIFICATION` | Classify a single text | `positive`, `negative`, `neutral` |
@@ -63,7 +63,7 @@ Developed by **Rida Aderkane** and **Mohamed Amine El Abidi**.
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -78,7 +78,7 @@ Developed by **Rida Aderkane** and **Mohamed Amine El Abidi**.
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -98,7 +98,7 @@ Controllers  →  Services  →  Repositories (Spring Data JPA)  →  Database
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 The application ships with an **embedded H2 database** and seeds all required data
 (users, labels, a sample dataset) automatically at startup — **no external database required**.
@@ -121,7 +121,7 @@ Then open **http://localhost:8080**.
 
 ---
 
-## 🐬 Running with MariaDB (optional)
+## Running with MariaDB (optional)
 
 To use MariaDB instead of the embedded database, start the bundled container and
 override the connection settings:
@@ -142,7 +142,7 @@ java -jar target\app.jar
 
 ---
 
-## 🔑 Default Accounts
+## Default Accounts
 
 | Username | Password | Role |
 |----------|----------|------|
@@ -151,11 +151,11 @@ java -jar target\app.jar
 | `user2`  | `user2`  | Annotator |
 | `user3`  | `user3`  | Annotator |
 
-> ⚠️ These are demo credentials for local use only. Change them before any real deployment.
+> These are demo credentials for local use only. Change them before any real deployment.
 
 ---
 
-## 📥 CSV Import Format
+## CSV Import Format
 
 **Single text** (classification / NLI premise):
 
@@ -173,7 +173,7 @@ id,text1,text2
 
 ---
 
-## 📊 Inter-Annotator Agreement
+## Inter-Annotator Agreement
 
 When several annotators label the same items, the platform computes standard
 agreement metrics per dataset:
@@ -189,7 +189,7 @@ more than 90% of the time.
 
 ---
 
-## 🤖 Model Training
+## Model Training
 
 From the admin training page, the platform exports the collected annotations and
 launches a baseline classifier ([python/train.py](python/train.py)). Results are
@@ -207,7 +207,7 @@ Configure the interpreter with the `PYTHON_EXECUTABLE` environment variable
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 annotation-nlp-platform/
@@ -231,7 +231,7 @@ annotation-nlp-platform/
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 All settings live in [src/main/resources/application.properties](src/main/resources/application.properties)
 and can be overridden via environment variables:
@@ -247,7 +247,7 @@ and can be overridden via environment variables:
 
 ---
 
-## 👤 Authors
+## Authors
 
 - **Rida Aderkane**
 - **Mohamed Amine El Abidi**
